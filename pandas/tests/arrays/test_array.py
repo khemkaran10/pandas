@@ -529,3 +529,11 @@ def test_array_to_numpy_na():
     result = arr.to_numpy(na_value=True, dtype=bool)
     expected = np.array([True, True])
     tm.assert_numpy_array_equal(result, expected)
+
+
+@pytest.mark.parametrize("dtype", ["uint8", "int64"])
+def test_take_with_array_like(dtype):
+    # GH#62448
+    arr = pd.Series([1, 2, 3], dtype=dtype).array
+    result = arr.take([-1], allow_fill=True)
+    assert result.dtype == "float64"

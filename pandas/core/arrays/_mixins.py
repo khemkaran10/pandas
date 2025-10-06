@@ -173,6 +173,10 @@ class NDArrayBackedExtensionArray(NDArrayBacked, ExtensionArray):
             fill_value=fill_value,
             axis=axis,
         )
+        if allow_fill and fill_value is np.nan:
+            # nan should have float64 type. GH#62448
+            # using self._from_backing_data sets the dtype of self.dtype.
+            return self._simple_new(new_data, new_data.dtype)
         return self._from_backing_data(new_data)
 
     # ------------------------------------------------------------------------
