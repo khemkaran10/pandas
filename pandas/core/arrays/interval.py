@@ -2128,6 +2128,9 @@ class IntervalArray(IntervalMixin, ExtensionArray):
             )
             comb = comb.view("complex128")[:, 0]
         else:
+            mask = ~np.isfinite(right)
+            if mask.any():
+                right[mask] = np.finfo("float64").max
             comb = (np.array(left.ravel(), dtype="complex128")) + (
                 1j * np.array(right.ravel(), dtype="complex128")
             )
